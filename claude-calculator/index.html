@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Enterprise vs Team — Cost Comparison</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-background-tertiary: #eeede8;
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --color-border-primary: rgba(0,0,0,0.32);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: system-ui, -apple-system, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #2a2a28;
+      --color-background-tertiary: #333330;
+      --color-text-primary: #f0efe9;
+      --color-text-secondary: #a8a79f;
+      --color-text-tertiary: #6e6d68;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+      --color-border-primary: rgba(255,255,255,0.28);
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-background-tertiary);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page-wrap { max-width: 780px; margin: 0 auto; }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+
+  .field label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type=number], select {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 14px;
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    outline: none;
+    font-family: var(--font-sans);
+  }
+
+  input[type=number]:focus, select:focus {
+    border-color: #185FA5;
+    box-shadow: 0 0 0 3px rgba(24,95,165,0.15);
+  }
+
+  input[type=range] {
+    width: 100%;
+    height: 4px;
+    accent-color: #185FA5;
+    cursor: pointer;
+  }
+
+  .metric {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .metric-label { font-size: 11px; color: var(--color-text-secondary); margin: 0 0 4px; }
+  .metric-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+
+  .plan-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+  }
+
+  .plan-card.recommended { border: 2px solid #185FA5; }
+
+  .plan-name { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px; }
+  .plan-price { font-size: 24px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+  .plan-price-sub { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 12px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 8px;
+  }
+
+  .badge-info { background: #E6F1FB; color: #0C447C; }
+  .badge-rec { background: #185FA5; color: #E6F1FB; }
+
+  .feature-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    font-size: 12px;
+  }
+
+  .feature-row:last-child { border: none; }
+  .feature-name { color: var(--color-text-secondary); }
+  .check { color: #0F6E56; font-weight: 500; }
+  .cross { color: var(--color-text-tertiary); }
+
+  .savings-bar {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+  .note { font-size: 11px; color: var(--color-text-tertiary); line-height: 1.5; margin: 8px 0 0; }
+
+  button.cta {
+    display: block;
+    margin: 0 auto 1rem;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+  }
+
+  button.cta:hover { background: var(--color-background-secondary); }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <h1>Claude plan cost comparison</h1>
+  <p class="page-subtitle">Estimate and compare Team vs Enterprise costs for your leadership team.</p>
+
+  <div class="card">
+    <p class="section-label">Your team</p>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="field">
+        <label for="seats">Number of people who will use Claude</label>
+        <input type="number" id="seats" min="5" step="1" value="25" placeholder="e.g. 25">
+      </div>
+      <div class="field">
+        <label for="usage_level">How heavily will they use it?</label>
+        <select id="usage_level">
+          <option value="light">Light — occasional questions, summaries</option>
+          <option value="moderate" selected>Moderate — daily work tasks</option>
+          <option value="heavy">Heavy — coding, large documents, all day</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Estimated monthly token usage per person (MTok)</label>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+        <input type="range" id="mtok_slider" min="0.5" max="20" step="0.5" value="3" style="flex:1">
+        <span style="font-size:14px;font-weight:500;min-width:60px;color:var(--color-text-primary)" id="mtok_label">3 MTok</span>
+      </div>
+      <p style="font-size:11px;color:var(--color-text-tertiary);margin:4px 0 0" id="mtok_hint">≈ 2.25M words/month per person</p>
+    </div>
+  </div>
+
+  <div id="plans_grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1rem"></div>
+
+  <div class="card" id="cost_detail">
+    <p class="section-label">Monthly cost breakdown</p>
+    <div class="grid3" id="metrics_row" style="margin-bottom:1rem"></div>
+    <div id="breakdown_detail"></div>
+    <p class="note">* Enterprise seat pricing is custom and varies. A commonly reported figure is ~$60/seat/month for standard contracts, billed annually. Usage is billed on top at standard API rates. Contact Anthropic sales for your exact quote. Team plan pricing is published: $25/seat/month (monthly) or $20/seat/month (annually).</p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Security &amp; privacy comparison</p>
+    <div class="grid2">
+      <div>
+        <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">Team plan</p>
+        <div id="team_features"></div>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:500;color:#185FA5;margin:0 0 10px">Enterprise plan</p>
+        <div id="ent_features"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const USAGE_PRESETS = {light:1, moderate:3, heavy:8};
+const SEAT_PRICE_TEAM_MONTHLY = 25;
+const SEAT_PRICE_TEAM_ANNUAL = 20;
+const SEAT_PRICE_ENT_ANNUAL = 60;
+const SONNET_INPUT = 3;
+const SONNET_OUTPUT = 15;
+const OUTPUT_RATIO = 0.4;
+
+const TEAM_FEATURES = [
+  ['No data training on your content','yes'],
+  ['Single Sign-On (SSO)','yes'],
+  ['Role-based access controls','yes'],
+  ['Just-in-Time user provisioning','yes'],
+  ['SCIM automated deprovisioning','no'],
+  ['Audit logs','no'],
+  ['Compliance API','no'],
+  ['Custom data retention','no'],
+  ['HIPAA-ready (BAA available)','no'],
+  ['Zero Data Retention (ZDR)','no'],
+  ['500K context window','no'],
+  ['Data Processing Agreement (DPA)','limited'],
+];
+
+const ENT_FEATURES = [
+  ['No data training on your content','yes'],
+  ['Single Sign-On (SSO)','yes'],
+  ['Role-based access controls','yes'],
+  ['Just-in-Time user provisioning','yes'],
+  ['SCIM automated deprovisioning','yes'],
+  ['Audit logs','yes'],
+  ['Compliance API','yes'],
+  ['Custom data retention','yes'],
+  ['HIPAA-ready (BAA available)','yes'],
+  ['Zero Data Retention (ZDR)','yes'],
+  ['500K context window','yes'],
+  ['Data Processing Agreement (DPA)','yes'],
+];
+
+function fmt(n){
+  if(n===0) return '$0';
+  return '$'+Math.round(n).toLocaleString('en-US');
+}
+
+function wordHint(mtok){
+  const w = mtok*750000;
+  if(w<1e6) return (w/1000).toFixed(0)+'K words/month per person';
+  return (w/1e6).toFixed(1)+'M words/month per person';
+}
+
+function renderFeatures(arr, el){
+  el.innerHTML = arr.map(([name,val])=>{
+    let mark, cls;
+    if(val==='yes'){mark='✓';cls='check';}
+    else if(val==='limited'){mark='~';cls='check';}
+    else{mark='—';cls='cross';}
+    return `<div class="feature-row"><span class="feature-name">${name}</span><span class="${cls}">${mark}</span></div>`;
+  }).join('');
+}
+
+function calc(){
+  const seats = Math.max(5, parseInt(document.getElementById('seats').value)||25);
+  const mtok = parseFloat(document.getElementById('mtok_slider').value)||3;
+  document.getElementById('mtok_label').textContent = mtok+' MTok';
+  document.getElementById('mtok_hint').textContent = '≈ '+wordHint(mtok);
+
+  const inputMtok = mtok*(1-OUTPUT_RATIO);
+  const outputMtok = mtok*OUTPUT_RATIO;
+  const usageCostPerSeat = inputMtok*SONNET_INPUT + outputMtok*SONNET_OUTPUT;
+  const totalUsageCost = usageCostPerSeat * seats;
+
+  const teamMonthly = seats * SEAT_PRICE_TEAM_MONTHLY;
+  const teamAnnual = seats * SEAT_PRICE_TEAM_ANNUAL;
+  const entSeatCost = seats * SEAT_PRICE_ENT_ANNUAL;
+  const entTotal = entSeatCost + totalUsageCost;
+
+  const annualTeam = teamAnnual * 12;
+  const annualEnt = entTotal * 12;
+  const diff = annualEnt - annualTeam;
+  const diffLabel = diff>=0 ? `+${fmt(diff)}/year more than Team (annual)` : `${fmt(Math.abs(diff))}/year less than Team`;
+
+  document.getElementById('plans_grid').innerHTML = `
+    <div class="plan-card">
+      <div class="badge badge-info">Current option</div>
+      <p class="plan-name">Team plan</p>
+      <p class="plan-price">${fmt(teamMonthly)}<span style="font-size:14px;font-weight:400;color:var(--color-text-secondary)">/month</span></p>
+      <p class="plan-price-sub">or ${fmt(teamAnnual)}/mo billed annually · ${seats} seats</p>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+        Usage included in seat fee (up to limits)<br>
+        Annual total: <strong style="color:var(--color-text-primary)">${fmt(annualTeam)}</strong>
+      </div>
+    </div>
+    <div class="plan-card recommended">
+      <div class="badge badge-rec">Recommended for security</div>
+      <p class="plan-name">Enterprise plan</p>
+      <p class="plan-price">${fmt(entSeatCost)}<span style="font-size:14px;font-weight:400;color:var(--color-text-secondary)">/month</span></p>
+      <p class="plan-price-sub">seat fee · ${seats} seats · usage billed on top</p>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+        + ${fmt(totalUsageCost)}/mo estimated usage<br>
+        Annual total: <strong style="color:#185FA5">${fmt(annualEnt)}</strong>
+      </div>
+    </div>`;
+
+  document.getElementById('metrics_row').innerHTML = `
+    <div class="metric"><p class="metric-label">Team plan/year</p><p class="metric-value">${fmt(annualTeam)}</p></div>
+    <div class="metric"><p class="metric-label">Enterprise plan/year</p><p class="metric-value" style="color:#185FA5">${fmt(annualEnt)}</p></div>
+    <div class="metric"><p class="metric-label">Extra cost for Enterprise</p><p class="metric-value" style="color:${diff>0?'#BA7517':'#0F6E56'}">${fmt(Math.abs(diff))}</p></div>`;
+
+  document.getElementById('breakdown_detail').innerHTML = `
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500">Enterprise cost components (monthly)</div>
+    <div class="feature-row"><span class="feature-name">Seat access fee (${seats} seats × $${SEAT_PRICE_ENT_ANNUAL}/mo est.)</span><span style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${fmt(entSeatCost)}</span></div>
+    <div class="feature-row"><span class="feature-name">Estimated usage (${seats} users × ${mtok} MTok × Sonnet 4.6 blended)</span><span style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${fmt(totalUsageCost)}</span></div>
+    <div class="feature-row" style="border:none"><span class="feature-name" style="font-weight:500;color:var(--color-text-primary)">Monthly total</span><span style="font-size:15px;font-weight:500;color:#185FA5">${fmt(entTotal)}</span></div>
+    <div class="savings-bar">
+      <span style="font-size:13px;color:var(--color-text-secondary)">vs Team plan (annual billing)</span>
+      <span style="font-size:13px;font-weight:500;color:${diff>0?'#BA7517':'#0F6E56'}">${diffLabel}</span>
+    </div>`;
+
+  renderFeatures(TEAM_FEATURES, document.getElementById('team_features'));
+  renderFeatures(ENT_FEATURES, document.getElementById('ent_features'));
+}
+
+document.getElementById('seats').addEventListener('input', calc);
+document.getElementById('usage_level').addEventListener('change', function(){
+  document.getElementById('mtok_slider').value = USAGE_PRESETS[this.value];
+  calc();
+});
+document.getElementById('mtok_slider').addEventListener('input', calc);
+calc();
+</script>
+</body>
+</html>
